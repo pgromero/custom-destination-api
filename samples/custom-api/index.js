@@ -68,10 +68,11 @@ server.get_sync_speed = () => {
   };
 };
 
-server.sync_batch = ({ operation, records }) => {
-  console.log("sync one batch of data", { operation, records });
-  let message = "";
+server.sync_batch = ({ records }) => {
+  console.log("sync one batch of data", { records });
+  let message = "Custom API Called";
   let status = "success"
+  /*
   switch (operation) {
     case "upsert":
       message = "Records upserted";
@@ -86,9 +87,10 @@ server.sync_batch = ({ operation, records }) => {
       message = "Invalid operation";
       status = "fail";
   }
+  */
 
   return {
-    executed_operation: operation,
+    // executed_operation: operation,
     status: status,
     message: message,
     record_results: status === "fail" ? [] : records.map((record, index) => {
