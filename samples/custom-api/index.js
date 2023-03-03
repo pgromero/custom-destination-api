@@ -70,17 +70,24 @@ server.get_sync_speed = () => {
 
 server.sync_batch = ({ operation, records }) => {
   console.log("sync one batch of data", { operation, records });
-  let message = '';
+  let message = "";
   switch (operation) {
-    case 'upsert': message = 'Records upserted'; break;
-    case 'insert': message = 'Records inserted'; break;
-    case 'delete': message = 'Records deleted'; break;
-    default: message = 'Invalid operation';
+    case "upsert":
+      message = "Records upserted";
+      break;
+    case "insert":
+      message = 'Records inserted';
+      break;
+    case "delete":
+      message = "Records deleted";
+      break;
+    default:
+      message = "Invalid operation";
   }
 
   return {
     executed_operation: operation,
-    status: 'success',
+    status: "success",
     message: message,
     record_results: records.map((record, index) => {
       success = [true, false][index % 2];
