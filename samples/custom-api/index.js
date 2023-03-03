@@ -60,7 +60,18 @@ server.get_sync_speed = () => {
 
 server.sync_batch = ({ operation, records }) => {
   console.log("sync one batch of data", { operation, records });
+  let message = '';
+  switch (operation) {
+    case 'upsert': message = 'Records upserted';
+    case 'insert': message = 'Records inserted';
+    case 'delete': message = 'Records deleted';
+    default: message = 'Invalid operation';
+  }
+
   return {
+    executed_operation: operation,
+    status: 'success',
+    message: message,
     record_results: records.map((record, index) => {
       success = [true, false][index % 2];
       return {
