@@ -26,9 +26,19 @@ server.list_fields = ({ object }) => {
   return {
     fields: [
       {
+        field_api_name: "custom_id_in_destination",
+        label: "ID",
+        identifier: true,
+        createable: true,
+        updateable: true,
+        type: "string",
+        required: true,
+        array: false,
+      },
+      {
         field_api_name: "email",
         label: "Email",
-        identifier: true,
+        identifier: false,
         createable: true,
         updateable: true,
         type: "string",
@@ -62,9 +72,9 @@ server.sync_batch = ({ operation, records }) => {
   console.log("sync one batch of data", { operation, records });
   let message = '';
   switch (operation) {
-    case 'upsert': message = 'Records upserted';
-    case 'insert': message = 'Records inserted';
-    case 'delete': message = 'Records deleted';
+    case 'upsert': message = 'Records upserted'; break;
+    case 'insert': message = 'Records inserted'; break;
+    case 'delete': message = 'Records deleted'; break;
     default: message = 'Invalid operation';
   }
 
@@ -75,7 +85,7 @@ server.sync_batch = ({ operation, records }) => {
     record_results: records.map((record, index) => {
       success = [true, false][index % 2];
       return {
-        identifier: record.email,
+        identifier: record.custom_id_in_destination,
         success,
         error_message: success ? null : "oops!",
       };
@@ -92,7 +102,6 @@ exports.handler = async function(event, context) {
   const result = server[method](params);
 
   const response = {
-    jsonrpc: "2.0",
     id,
     result,
   };
@@ -102,30 +111,3 @@ exports.handler = async function(event, context) {
     body: JSON.stringify(response)
   };
 }
-
-// Run as a regular node process
-
-// const port = 6161;
-
-// require("http")
-//   .createServer((req, res) => {
-//     var requestBodyBuffer = "";
-//     req.on("data", (chunk) => (requestBodyBuffer += chunk));
-//     req.on("end", () => {
-//       //console.log({requestBody})
-//       const { id, method, params } = JSON.parse(requestBodyBuffer);
-
-//       const result = server[method](params);
-
-//       const body = {
-//         jsonrpc: "2.0",
-//         id,
-//         result,
-//       };
-
-//       res.writeHead(200, { "Content-Type": "application/json" });
-//       res.write(JSON.stringify(body));
-//       res.end();
-//     });
-//   })
-//   .listen(port);
