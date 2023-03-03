@@ -58,8 +58,8 @@ server.get_sync_speed = () => {
   };
 };
 
-server.sync_batch = ({ sync_plan, records }) => {
-  console.log("sync one batch of data", { sync_plan, records });
+server.sync_batch = ({ operation, records }) => {
+  console.log("sync one batch of data", { operation, records });
   return {
     record_results: records.map((record, index) => {
       success = [true, false][index % 2];
